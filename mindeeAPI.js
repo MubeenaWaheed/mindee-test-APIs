@@ -12,7 +12,7 @@ async function configureMindee(key, filePath, documentType) {
 
     const customEndpoint = mindeeClient.createEndpoint(
       documentType,
-      "MubeenaWaheed"
+      "Propellus"
     );
 
     const apiResponse = await mindeeClient.parse(
@@ -145,13 +145,19 @@ const scanPakistaniCnic = async (req, res) => {
 
 const scanDocument = async (req, res) => {
   try {
+
     const documentType  = req.body.documentType;
+    
     const filePath =  req.file.path;
 
-    let {fields, data }= await configureMindee(MINDI_API_KEY, filePath, documentType)
+    if(!filePath || !documentType){
+      return res.status(400).json({ message: "file path or document type is required" });
+    }
+
+    let { fields, data }= await configureMindee(MINDI_API_KEY, filePath, documentType)
 
 
-    if(!fields || !data){
+    if(!fields || !data) {
       return res.status(404).json({ message: "data not found" });
     }
   
